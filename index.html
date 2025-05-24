@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🎲 QUIZMANIAPOINTS!!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet" />
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background-image: url('img/quizmania-logo.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            position: relative;
+            color: #fff;
+            text-shadow: 1px 1px 2px #000;
+            min-height: 100vh;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(0, 0, 0, 0.3);
+            z-index: 0;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            background-color: rgba(0, 0, 0, 0.75);
+            max-width: 700px;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 15px;
+        }
+
+        h1 {
+            font-family: 'Luckiest Guy', cursive;
+            font-size: 32px;
+            text-align: center;
+            margin-bottom: 20px;
+            color: #ffcc00;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 8px;
+            border: none;
+            margin-bottom: 10px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        button {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            background-color: #ffcc00;
+            color: #000;
+            transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            margin: 5px;
+        }
+
+        button:hover {
+            background-color: #ffaa00;
+            transform: scale(1.05);
+            box-shadow: 0 6px 10px rgba(0,0,0,0.3);
+        }
+
+        button:active {
+            transform: scale(0.95);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+        }
+
+        .jugador-card {
+            background-color: rgba(255, 255, 255, 0.15);
+            padding: 15px;
+            border-radius: 15px;
+            margin: 10px 0;
+            text-align: center;
+        }
+
+        .jugador-card h3 {
+            margin: 0 0 10px 0;
+            font-size: 20px;
+            color: #ffcc00;
+        }
+
+        .puntos {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .control-buttons {
+            text-align: center;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+
+        .ranking-final {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .ranking-final h3 {
+            font-size: 22px;
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
+
+        .podio-item {
+            font-size: 18px;
+            margin: 6px 0;
+        }
+
+        .ventana-ayuda {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(0, 0, 0, 0.85);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+            padding: 20px;
+            text-align: center;
+            font-size: 18px;
+        }
+
+        .ventana-ayuda-content {
+            background-color: #222;
+            padding: 25px;
+            border-radius: 15px;
+            max-width: 90%;
+            position: relative;
+            box-shadow: 0 0 20px #000;
+        }
+
+        .ventana-ayuda-content h3 {
+            margin-top: 0;
+            color: #ffcc00;
+            font-family: 'Luckiest Guy', cursive;
+            font-size: 22px;
+        }
+
+        .cerrar-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .boton-ayuda {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #ffcc00;
+            color: #000;
+            border: none;
+            padding: 12px 16px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 998;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+            transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+
+        .boton-ayuda:hover {
+            background-color: #ffaa00;
+            transform: scale(1.08);
+            box-shadow: 0 6px 10px rgba(0,0,0,0.4);
+        }
+
+        .boton-ayuda:active {
+            transform: scale(0.95);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                margin: 10px;
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 26px;
+            }
+
+            .ventana-ayuda-content {
+                padding: 20px;
+            }
+
+            button {
+                width: 100%;
+                margin: 6px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="overlay"></div>
+
+    <div class="container">
+        <h1>🎲 QUIZMANIAPOINTS!!</h1>
+
+        <div>
+            <input type="text" id="nombreJugador" placeholder="Nombre del jugador" />
+            <button onclick="agregarJugador()">Agregar</button>
+        </div>
+
+        <div class="control-buttons">
+            <button onclick="reiniciarPuntos()">🔄 Reiniciar Puntos</button>
+            <button onclick="mostrarRanking()">🏆 Mostrar Ranking Final</button>
+        </div>
+
+        <div id="listaJugadores"></div>
+        <div class="ranking-final" id="rankingFinal"></div>
+    </div>
+
+    <div id="ventanaAyuda" class="ventana-ayuda" style="display:none;">
+        <div class="ventana-ayuda-content">
+            <button class="cerrar-btn" onclick="cerrarAyuda()">❌</button>
+            <h3>¡Bienvenido a QUIZMANIAPOINTS! 🎉</h3>
+            <p>Agrega jugadores, suma o resta puntos y revisa el podio final fácilmente.</p>
+        </div>
+    </div>
+
+    <button id="botonAyuda" class="boton-ayuda" onclick="mostrarAyuda()">📘 Ayuda</button>
+
+    <script>
+        let jugadores = [];
+
+        function agregarJugador() {
+            const nombre = document.getElementById('nombreJugador').value.trim();
+            if (nombre === '') return;
+            if (jugadores.some(j => j.nombre.toLowerCase() === nombre.toLowerCase())) {
+                alert("Ese jugador ya ha sido agregado.");
+                return;
+            }
+
+            jugadores.push({ nombre: nombre, puntos: 0 });
+            actualizarListaJugadores();
+            document.getElementById('nombreJugador').value = '';
+        }
+
+        function modificarPuntos(index, puntos) {
+            jugadores[index].puntos += puntos;
+            actualizarListaJugadores();
+        }
+
+        function reiniciarPuntos() {
+            jugadores.forEach(j => j.puntos = 0);
+            actualizarListaJugadores();
+            document.getElementById('rankingFinal').innerHTML = '';
+        }
+
+        function actualizarListaJugadores() {
+            const lista = document.getElementById('listaJugadores');
+            lista.innerHTML = '';
+
+            jugadores.forEach((jugador, index) => {
+                const div = document.createElement('div');
+                div.className = 'jugador-card';
+                div.innerHTML = `
+                    <h3>${jugador.nombre}</h3>
+                    <div class="puntos">${jugador.puntos} puntos</div>
+                    <div>
+                        <button onclick="modificarPuntos(${index}, 4)">+4</button>
+                        <button onclick="modificarPuntos(${index}, -2)">-2</button>
+                    </div>
+                `;
+                lista.appendChild(div);
+            });
+        }
+
+        function mostrarRanking() {
+            const podio = jugadores
+                .slice()
+                .sort((a, b) => b.puntos - a.puntos)
+                .slice(0, 3);
+
+            const rankingDiv = document.getElementById('rankingFinal');
+            rankingDiv.innerHTML = '<h3>🏆 Podio Final</h3>';
+
+            const medallas = ['🥇', '🥈', '🥉'];
+
+            podio.forEach((jugador, i) => {
+                rankingDiv.innerHTML += `
+                    <div class="podio-item">${medallas[i]} ${jugador.nombre} - ${jugador.puntos} pts</div>
+                `;
+            });
+
+            if (podio.length === 0) {
+                rankingDiv.innerHTML += `<p>No hay jugadores aún.</p>`;
+            }
+        }
+
+        window.onload = function () {
+            document.getElementById('ventanaAyuda').style.display = 'flex';
+        };
+
+        function mostrarAyuda() {
+            document.getElementById('ventanaAyuda').style.display = 'flex';
+        }
+
+        function cerrarAyuda() {
+            document.getElementById('ventanaAyuda').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
