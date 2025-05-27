@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🎲 QUIZMANIAPOINTS!!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet" />
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background-image: url('img/quizmania-logo.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            position: relative;
+            color: #fff;
+            text-shadow: 1px 1px 2px #000;
+            min-height: 100vh;
+            transition: filter 0.3s ease;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(0, 0, 0, 0.3);
+            z-index: 0;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            background-color: rgba(0, 0, 0, 0.75);
+            max-width: 700px;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 15px;
+            transition: filter 0.3s ease;
+        }
+
+        h1 {
+            font-family: 'Luckiest Guy', cursive;
+            font-size: 32px;
+            text-align: center;
+            margin-bottom: 20px;
+            color: #ffcc00;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 8px;
+            border: none;
+            margin-bottom: 10px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        button {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            background-color: #ffcc00;
+            color: #000;
+            transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            margin: 5px;
+        }
+
+        button:hover {
+            background-color: #ffaa00;
+            transform: scale(1.05);
+            box-shadow: 0 6px 10px rgba(0,0,0,0.3);
+        }
+
+        button:active {
+            transform: scale(0.95);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+        }
+
+        .jugador-card {
+            background-color: rgba(255, 255, 255, 0.15);
+            padding: 15px;
+            border-radius: 15px;
+            margin: 10px 0;
+            text-align: center;
+        }
+
+        .jugador-card h3 {
+            margin: 0 0 10px 0;
+            font-size: 20px;
+            color: #ffcc00;
+        }
+
+        .puntos {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .control-buttons {
+            text-align: center;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+
+        .ranking-final {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .ranking-final h3 {
+            font-size: 22px;
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
+
+        .podio-item {
+            font-size: 18px;
+            margin: 6px 0;
+        }
+
+        .ventana-ayuda {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(0, 0, 0, 0.85);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+            padding: 20px;
+            text-align: center;
+            font-size: 18px;
+        }
+
+        .ventana-ayuda-content {
+            background-color: #222;
+            padding: 25px;
+            border-radius: 15px;
+            max-width: 90%;
+            position: relative;
+            box-shadow: 0 0 20px #000;
+        }
+
+        .ventana-ayuda-content h3 {
+            margin-top: 0;
+            color: #ffcc00;
+            font-family: 'Luckiest Guy', cursive;
+            font-size: 22px;
+        }
+
+        .cerrar-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .boton-ayuda {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #ffcc00;
+            color: #000;
+            border: none;
+            padding: 12px 16px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 998;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+            transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+
+        .boton-ayuda:hover {
+            background-color: #ffaa00;
+            transform: scale(1.08);
+            box-shadow: 0 6px 10px rgba(0,0,0,0.4);
+        }
+
+        .boton-ayuda:active {
+            transform: scale(0.95);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        /* Botones verdes +10 y +20 */
+        .botones-positivos {
+            display: inline-flex;
+            gap: 10px;
+            margin-bottom: 8px;
+            justify-content: center;
+        }
+        .btn-positivo {
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 8px;
+            padding: 10px 16px;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            transition: background-color 0.3s ease;
+        }
+        .btn-positivo:hover {
+            background-color: #45a049;
+            transform: scale(1.05);
+        }
+        .btn-positivo:active {
+            transform: scale(0.95);
+        }
+
+        /* Botones rojos -10 y -3 */
+        .botones-negativos {
+            display: inline-flex;
+            gap: 10px;
+            margin-bottom: 8px;
+            justify-content: center;
+        }
+        .btn-negativo {
+            background-color: #e53935;
+            color: white;
+            border-radius: 8px;
+            padding: 10px 16px;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            transition: background-color 0.3s ease;
+        }
+        .btn-negativo:hover {
+            background-color: #d32f2f;
+            transform: scale(1.05);
+        }
+        .btn-negativo:active {
+            transform: scale(0.95);
+        }
+
+        /* Modal podio pantalla completa */
+        #modalPodio {
+            display: none;
+            position: fixed;
+            top:0; left:0; right:0; bottom:0;
+            background: rgba(0,0,0,0.95);
+            color: #ffcc00;
+            font-family: 'Luckiest Guy', cursive;
+            font-size: 24px;
+            text-align: center;
+            z-index: 1000;
+            padding: 40px 20px;
+            overflow-y: auto;
+        }
+
+        #modalPodio h2 {
+            margin-bottom: 30px;
+        }
+
+        #modalPodio .podio-item {
+            font-size: 28px;
+            margin: 15px 0;
+        }
+
+        #modalPodio button {
+            margin-top: 40px;
+            font-size: 20px;
+            padding: 10px 30px;
+            border:none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+            transition: background-color 0.3s ease;
+            margin-right: 15px;
+        }
+
+        #modalPodio #cerrarPodioBtn {
+            background-color: #ffcc00;
+            color: #000;
+        }
+
+        #modalPodio #cerrarPodioBtn:hover {
+            background-color: #ffaa00;
+        }
+
+        #modalPodio #reiniciarPodioBtn {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        #modalPodio #reiniciarPodioBtn:hover {
+            background-color: #45a049;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                margin: 10px;
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 26px;
+            }
+
+            .ventana-ayuda-content {
+                padding: 20px;
+            }
+
+            button, #modalPodio button {
+                width: 100%;
+                margin: 6px 0 0 0;
+            }
+
+            .botones-positivos, .botones-negativos {
+                flex-direction: column;
+                gap: 6px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="overlay"></div>
+
+    <div class="container" id="mainContent">
+        <h1>🎲 QUIZMANIAPOINTS!!</h1>
+
+        <div>
+            <input type="text" id="nombreJugador" placeholder="Nombre del jugador" />
+            <button onclick="agregarJugador()">Agregar</button>
+        </div>
+
+        <div class="control-buttons">
+            <button onclick="reiniciarPuntos()">🔄 Reiniciar Puntos</button>
+            <button onclick="mostrarRanking()" style="display:none;">🏆 Mostrar Ranking Final</button>
+        </div>
+
+        <div id="listaJugadores"></div>
+        <div class="ranking-final" id="rankingFinal"></div>
+    </div>
+
+    <div id="ventanaAyuda" class="ventana-ayuda" style="display:none;">
+        <div class="ventana-ayuda-content">
+            <button class="cerrar-btn" onclick="cerrarAyuda()">❌</button>
+            <h3>¡Bienvenido a QUIZMANIAPOINTS! 🎉</h3>
+            <p>Agrega jugadores, suma o resta puntos y revisa el podio final fácilmente.</p>
+        </div>
+    </div>
+
+    <button id="botonAyuda" class="boton-ayuda" onclick="mostrarAyuda()">📘 Ayuda</button>
+
+    <!-- Modal Podio -->
+    <div id="modalPodio">
+        <h2>🏆 Podio Final 🏆</h2>
+        <div id="contenidoPodio"></div>
+        <button id="cerrarPodioBtn" onclick="cerrarPodio()">Cerrar Podio</button>
+        <button id="reiniciarPodioBtn" onclick="reiniciarDesdePodio()">Reiniciar Puntos</button>
+    </div>
+
+    <script>
+        let jugadores = [];
+
+        function agregarJugador() {
+            const nombre = document.getElementById('nombreJugador').value.trim();
+            if (nombre === '') return;
+            if (jugadores.some(j => j.nombre.toLowerCase() === nombre.toLowerCase())) {
+                alert("Ese jugador ya ha sido agregado.");
+                return;
+            }
+
+            jugadores.push({ nombre: nombre, puntos: 0 });
+            actualizarListaJugadores();
+            document.getElementById('nombreJugador').value = '';
+        }
+
+        function modificarPuntos(index, puntos) {
+            jugadores[index].puntos += puntos;
+            actualizarListaJugadores();
+
+            if (jugadores[index].puntos >= 100) {
+                mostrarModalPodio();
+            }
+        }
+
+        function reiniciarPuntos() {
+            jugadores.forEach(j => j.puntos = 0);
+            actualizarListaJugadores();
+            document.getElementById('rankingFinal').innerHTML = '';
+        }
+
+        function actualizarListaJugadores() {
+            const lista = document.getElementById('listaJugadores');
+            lista.innerHTML = '';
+
+            jugadores.forEach((jugador, index) => {
+                const div = document.createElement('div');
+                div.className = 'jugador-card';
+
+                div.innerHTML = `
+                    <h3>${jugador.nombre}</h3>
+                    <div class="puntos">${jugador.puntos} puntos</div>
+
+                    <div class="botones-positivos">
+                        <button class="btn-positivo" onclick="modificarPuntos(${index}, 10)">+10</button>
+                        <button class="btn-positivo" onclick="modificarPuntos(${index}, 20)">+20</button>
+                    </div>
+
+                    <div class="botones-negativos">
+                        <button class="btn-negativo" onclick="modificarPuntos(${index}, -10)">-10</button>
+                        <button class="btn-negativo" onclick="modificarPuntos(${index}, -3)">-3</button>
+                    </div>
+                `;
+                lista.appendChild(div);
+            });
+        }
+
+        function mostrarRanking() {
+            const podio = jugadores
+                .slice()
+                .sort((a, b) => b.puntos - a.puntos)
+                .slice(0, 3);
+
+            const rankingDiv = document.getElementById('rankingFinal');
+            rankingDiv.innerHTML = '<h3>🏆 Podio Final</h3>';
+
+            const medallas = ['🥇', '🥈', '🥉'];
+
+            podio.forEach((jugador, i) => {
+                rankingDiv.innerHTML += `
+                    <div class="podio-item">${medallas[i]} ${jugador.nombre} - ${jugador.puntos} puntos</div>
+                `;
+            });
+        }
+
+        function mostrarAyuda() {
+            document.getElementById('ventanaAyuda').style.display = 'flex';
+        }
+
+        function cerrarAyuda() {
+            document.getElementById('ventanaAyuda').style.display = 'none';
+        }
+
+        // Modal podio pantalla completa
+        function mostrarModalPodio() {
+            const modal = document.getElementById('modalPodio');
+            const contenido = document.getElementById('contenidoPodio');
+            const podio = jugadores
+                .slice()
+                .sort((a, b) => b.puntos - a.puntos)
+                .slice(0, 3);
+
+            const medallas = ['🥇', '🥈', '🥉'];
+
+            contenido.innerHTML = '';
+            podio.forEach((jugador, i) => {
+                contenido.innerHTML += `<div class="podio-item">${medallas[i]} ${jugador.nombre} - ${jugador.puntos} puntos</div>`;
+            });
+
+            modal.style.display = 'block';
+
+            // Aplica blur al resto del contenido
+            document.getElementById('mainContent').style.filter = 'blur(5px)';
+            document.getElementById('botonAyuda').style.filter = 'blur(5px)';
+        }
+
+        function cerrarPodio() {
+            const modal = document.getElementById('modalPodio');
+            modal.style.display = 'none';
+
+            document.getElementById('mainContent').style.filter = 'none';
+            document.getElementById('botonAyuda').style.filter = 'none';
+        }
+
+        function reiniciarDesdePodio() {
+            reiniciarPuntos();
+            cerrarPodio();
+        }
+    </script>
+</body>
+</html>
+
