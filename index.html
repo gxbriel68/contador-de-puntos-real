@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>🎲 QUIZMANIAPOINTS!!</title>
     <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
     <style>
         body {
             margin: 0;
@@ -19,14 +20,12 @@
             min-height: 100vh;
             transition: filter 0.3s ease;
         }
-
         .overlay {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
             background-color: rgba(0, 0, 0, 0.3);
             z-index: 0;
         }
-
         .container {
             position: relative;
             z-index: 1;
@@ -37,7 +36,6 @@
             border-radius: 15px;
             transition: filter 0.3s ease;
         }
-
         h1 {
             font-family: 'Luckiest Guy', cursive;
             font-size: 32px;
@@ -45,7 +43,18 @@
             margin-bottom: 20px;
             color: #ffcc00;
         }
-
+        .agregar-jugador {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+        .agregar-jugador input[type="text"] {
+            width: 60%;
+            min-width: 120px;
+            max-width: 350px;
+        }
         input[type="text"] {
             padding: 10px;
             font-size: 16px;
@@ -55,7 +64,6 @@
             width: 100%;
             box-sizing: border-box;
         }
-
         button {
             padding: 10px 16px;
             border: none;
@@ -65,63 +73,147 @@
             cursor: pointer;
             background-color: #ffcc00;
             color: #000;
-            transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s;
             box-shadow: 0 4px 6px rgba(0,0,0,0.2);
             margin: 5px;
         }
-
         button:hover {
             background-color: #ffaa00;
             transform: scale(1.05);
             box-shadow: 0 6px 10px rgba(0,0,0,0.3);
         }
-
         button:active {
             transform: scale(0.95);
             box-shadow: 0 2px 4px rgba(0,0,0,0.4);
         }
-
         .jugador-card {
-            background-color: rgba(255, 255, 255, 0.15);
-            padding: 15px;
-            border-radius: 15px;
-            margin: 10px 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.15) 70%, rgba(255,204,0,0.08));
+            padding: 18px 14px 16px 14px;
+            border-radius: 18px;
+            margin: 16px 0;
             text-align: center;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+            border: 2px solid #ffcc00;
+            position: relative;
         }
-
         .jugador-card h3 {
-            margin: 0 0 10px 0;
-            font-size: 20px;
+            margin: 0 0 8px 0;
+            font-size: 22px;
             color: #ffcc00;
+            letter-spacing: 1px;
         }
-
         .puntos {
-            font-size: 18px;
-            margin-bottom: 10px;
+            font-size: 20px;
+            margin-bottom: 12px;
+            font-weight: bold;
+            color: #fff;
+            background: rgba(0,0,0,0.2);
+            border-radius: 8px;
+            display: inline-block;
+            padding: 4px 18px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
         }
-
+        .score-controls {
+            display: flex;
+            gap: 18px;
+            justify-content: center;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+        .score-box {
+            background: rgba(255,255,255,0.11);
+            border-radius: 12px;
+            padding: 14px 12px 10px 12px;
+            min-width: 180px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.13);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 1.5px solid #ffcc00;
+            position: relative;
+        }
+        .score-box.positivo {
+            border-color: #4caf50;
+            background: linear-gradient(135deg, rgba(76,175,80,0.09) 60%, rgba(255,255,255,0.11));
+        }
+        .score-box.negativo {
+            border-color: #e53935;
+            background: linear-gradient(135deg, rgba(229,57,53,0.09) 60%, rgba(255,255,255,0.11));
+        }
+        .score-title {
+            font-size: 15px;
+            font-weight: bold;
+            margin-bottom: 7px;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .score-box input[type="number"] {
+            padding: 8px 8px;
+            border-radius: 7px;
+            border: 1.5px solid #ccc;
+            font-size: 16px;
+            width: 75px;
+            margin-bottom: 7px;
+            outline: none;
+            text-align: center;
+            transition: border-color 0.2s;
+        }
+        .score-box input[type="number"]:focus {
+            border-color: #ffcc00;
+            background: #fffbe5;
+        }
+        .score-box button {
+            background-color: #ffcc00;
+            color: #222;
+            font-size: 15px;
+            padding: 7px 18px;
+            border-radius: 7px;
+            margin: 0;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.11);
+            font-weight: bold;
+        }
+        .score-box.positivo button {
+            background-color: #4caf50;
+            color: #fff;
+        }
+        .score-box.positivo button:hover {
+            background-color: #43a047;
+        }
+        .score-box.negativo button {
+            background-color: #e53935;
+            color: #fff;
+        }
+        .score-box.negativo button:hover {
+            background-color: #c62828;
+        }
+        .score-box .fa-arrow-up {
+            color: #4caf50;
+            font-size: 18px;
+        }
+        .score-box .fa-arrow-down {
+            color: #e53935;
+            font-size: 18px;
+        }
         .control-buttons {
             text-align: center;
             margin: 15px 0;
             flex-wrap: wrap;
         }
-
         .ranking-final {
             margin-top: 20px;
             text-align: center;
         }
-
         .ranking-final h3 {
             font-size: 22px;
             margin-bottom: 10px;
             color: #ffffff;
         }
-
         .podio-item {
             font-size: 18px;
             margin: 6px 0;
         }
-
         .ventana-ayuda {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -135,7 +227,6 @@
             text-align: center;
             font-size: 18px;
         }
-
         .ventana-ayuda-content {
             background-color: #222;
             padding: 25px;
@@ -144,14 +235,12 @@
             position: relative;
             box-shadow: 0 0 20px #000;
         }
-
         .ventana-ayuda-content h3 {
             margin-top: 0;
             color: #ffcc00;
             font-family: 'Luckiest Guy', cursive;
             font-size: 22px;
         }
-
         .cerrar-btn {
             position: absolute;
             top: 10px;
@@ -162,7 +251,6 @@
             color: #fff;
             cursor: pointer;
         }
-
         .boton-ayuda {
             position: fixed;
             bottom: 20px;
@@ -177,73 +265,17 @@
             cursor: pointer;
             z-index: 998;
             box-shadow: 0 4px 8px rgba(0,0,0,0.5);
-            transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s;
         }
-
         .boton-ayuda:hover {
             background-color: #ffaa00;
             transform: scale(1.08);
             box-shadow: 0 6px 10px rgba(0,0,0,0.4);
         }
-
         .boton-ayuda:active {
             transform: scale(0.95);
             box-shadow: 0 2px 4px rgba(0,0,0,0.5);
         }
-
-        /* Botones verdes +10 y +20 */
-        .botones-positivos {
-            display: inline-flex;
-            gap: 10px;
-            margin-bottom: 8px;
-            justify-content: center;
-        }
-        .btn-positivo {
-            background-color: #4CAF50;
-            color: white;
-            border-radius: 8px;
-            padding: 10px 16px;
-            font-weight: bold;
-            border: none;
-            cursor: pointer;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-            transition: background-color 0.3s ease;
-        }
-        .btn-positivo:hover {
-            background-color: #45a049;
-            transform: scale(1.05);
-        }
-        .btn-positivo:active {
-            transform: scale(0.95);
-        }
-
-        /* Botones rojos -10 y -3 */
-        .botones-negativos {
-            display: inline-flex;
-            gap: 10px;
-            margin-bottom: 8px;
-            justify-content: center;
-        }
-        .btn-negativo {
-            background-color: #e53935;
-            color: white;
-            border-radius: 8px;
-            padding: 10px 16px;
-            font-weight: bold;
-            border: none;
-            cursor: pointer;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-            transition: background-color 0.3s ease;
-        }
-        .btn-negativo:hover {
-            background-color: #d32f2f;
-            transform: scale(1.05);
-        }
-        .btn-negativo:active {
-            transform: scale(0.95);
-        }
-
-        /* Modal podio pantalla completa */
         #modalPodio {
             display: none;
             position: fixed;
@@ -257,16 +289,13 @@
             padding: 40px 20px;
             overflow-y: auto;
         }
-
         #modalPodio h2 {
             margin-bottom: 30px;
         }
-
         #modalPodio .podio-item {
             font-size: 28px;
             margin: 15px 0;
         }
-
         #modalPodio button {
             margin-top: 40px;
             font-size: 20px;
@@ -276,50 +305,52 @@
             cursor: pointer;
             font-weight: bold;
             box-shadow: 0 4px 8px rgba(0,0,0,0.4);
-            transition: background-color 0.3s ease;
+            transition: background-color 0.3s;
             margin-right: 15px;
         }
-
         #modalPodio #cerrarPodioBtn {
             background-color: #ffcc00;
             color: #000;
         }
-
         #modalPodio #cerrarPodioBtn:hover {
             background-color: #ffaa00;
         }
-
         #modalPodio #reiniciarPodioBtn {
             background-color: #4CAF50;
             color: white;
         }
-
         #modalPodio #reiniciarPodioBtn:hover {
             background-color: #45a049;
         }
-
         @media (max-width: 600px) {
             .container {
                 margin: 10px;
                 padding: 15px;
             }
-
             h1 {
                 font-size: 26px;
             }
-
             .ventana-ayuda-content {
                 padding: 20px;
             }
-
             button, #modalPodio button {
                 width: 100%;
                 margin: 6px 0 0 0;
             }
-
-            .botones-positivos, .botones-negativos {
+            .score-controls {
                 flex-direction: column;
-                gap: 6px;
+                gap: 10px;
+            }
+            .jugador-card {
+                padding: 12px 4px 10px 4px;
+            }
+            .agregar-jugador {
+                flex-direction: column;
+                gap: 8px;
+            }
+            .agregar-jugador input[type="text"] {
+                width: 100%;
+                max-width: 100%;
             }
         }
     </style>
@@ -331,7 +362,7 @@
     <div class="container" id="mainContent">
         <h1>🎲 QUIZMANIAPOINTS!!</h1>
 
-        <div>
+        <div class="agregar-jugador">
             <input type="text" id="nombreJugador" placeholder="Nombre del jugador" />
             <button onclick="agregarJugador()">Agregar</button>
         </div>
@@ -394,6 +425,7 @@
             document.getElementById('rankingFinal').innerHTML = '';
         }
 
+        // NUEVA versión con diseño bonito para sumar/restar puntos
         function actualizarListaJugadores() {
             const lista = document.getElementById('listaJugadores');
             lista.innerHTML = '';
@@ -405,15 +437,21 @@
                 div.innerHTML = `
                     <h3>${jugador.nombre}</h3>
                     <div class="puntos">${jugador.puntos} puntos</div>
-
-                    <div class="botones-positivos">
-                        <button class="btn-positivo" onclick="modificarPuntos(${index}, 10)">+10</button>
-                        <button class="btn-positivo" onclick="modificarPuntos(${index}, 20)">+20</button>
-                    </div>
-
-                    <div class="botones-negativos">
-                        <button class="btn-negativo" onclick="modificarPuntos(${index}, -10)">-10</button>
-                        <button class="btn-negativo" onclick="modificarPuntos(${index}, -3)">-3</button>
+                    <div class="score-controls">
+                        <div class="score-box positivo">
+                            <div class="score-title"><i class="fa-solid fa-arrow-up"></i> Puntos que ganas</div>
+                            <input type="number" id="ganar-${index}" class="puntos-input" placeholder="Ej: 10" min="0">
+                            <button onclick="modificarPuntos(${index}, parseInt(document.getElementById('ganar-${index}').value) || 0)">
+                                <i class="fa-solid fa-plus"></i> Aplicar
+                            </button>
+                        </div>
+                        <div class="score-box negativo">
+                            <div class="score-title"><i class="fa-solid fa-arrow-down"></i> Puntos que pierdes</div>
+                            <input type="number" id="perder-${index}" class="puntos-input" placeholder="Ej: 10" min="0">
+                            <button onclick="modificarPuntos(${index}, -(parseInt(document.getElementById('perder-${index}').value) || 0))">
+                                <i class="fa-solid fa-minus"></i> Aplicar
+                            </button>
+                        </div>
                     </div>
                 `;
                 lista.appendChild(div);
@@ -484,4 +522,3 @@
     </script>
 </body>
 </html>
-
