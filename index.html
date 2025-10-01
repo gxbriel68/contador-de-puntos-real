@@ -489,7 +489,7 @@
                 const jugador = jugadores[index];
                 const tipo = puntos > 0 ? 'ganado' : 'perdido';
                 const cantidad = Math.abs(puntos);
-                const texto = `El equipo ${jugador.nombre} ha ${tipo} ${cantidad} puntos.`;
+                const texto = `El jugador ${jugador.nombre} ha ${tipo} ${cantidad} puntos.`;
 
                 const utterance = new SpeechSynthesisUtterance(texto);
                 utterance.lang = 'es-ES';
@@ -507,7 +507,7 @@
                 speechSynthesis.speak(utterance);
             }
 
-            if (jugadores[index].puntos >= 75) {
+            if (jugadores[index].puntos >= 1000) {
                 mostrarModalPodio();
             }
         }
@@ -629,6 +629,7 @@
     </script>
 </body>
 </html>
+
 
 
 
