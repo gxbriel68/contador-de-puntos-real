@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🎲 zunga!!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    <style>
+        /* ... Tus estilos CSS originales aquí ... */
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background-image: url('img/generated-image.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            position: relative;
+            color: #fff;
+            text-shadow: 1px 1px 2px #000;
+            min-height: 100vh;
+            transition: filter 0.3s ease;
+        }
+        .overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(0, 0, 0, 0.3);
+            z-index: 0;
+        }
+        .container {
+            position: relative;
+            z-index: 1;
+            background-color: rgba(0, 0, 0, 0.75);
+            max-width: 700px;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 15px;
+            transition: filter 0.3s ease;
+        }
+        h1 {
+            font-family: 'Luckiest Guy', cursive;
+            font-size: 32px;
+            text-align: center;
+            margin-bottom: 20px;
+            color: #66ccff; /* Azul clarito */
+        }
+        .agregar-jugador {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+        .agregar-jugador input[type="text"] {
+            width: 60%;
+            min-width: 120px;
+            max-width: 350px;
+        }
+        input[type="text"] {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 8px;
+            border: none;
+            margin-bottom: 10px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            background-color: #66ccff; /* azul clarito */
+            color: #000;
+            transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #55bbee; /* azul clarito más oscuro para hover */
+            transform: scale(1.05);
+            box-shadow: 0 6px 10px rgba(0,0,0,0.3);
+        }
+        button:active {
+            transform: scale(0.95);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+        }
+        .jugador-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.15) 70%, rgba(255,204,0,0.08));
+            padding: 18px 14px 16px 14px;
+            border-radius: 18px;
+            margin: 16px 0;
+            text-align: center;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+            border: 2px solid #66ccff; /* Contorno azul clarito */
+            position: relative;
+        }
+        .jugador-card h3 {
+            margin: 0 0 8px 0;
+            font-size: 22px;
+            color: #ffcc00;
+            letter-spacing: 1px;
+        }
+        .puntos {
+            font-size: 20px;
+            margin-bottom: 12px;
+            font-weight: bold;
+            color: #fff;
+            background: rgba(0,0,0,0.2);
+            border-radius: 8px;
+            display: inline-block;
+            padding: 4px 18px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .score-controls {
+            display: flex;
+            gap: 18px;
+            justify-content: center;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+        .score-box {
+            background: rgba(255,255,255,0.11);
+            border-radius: 12px;
+            padding: 14px 12px 10px 12px;
+            min-width: 180px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.13);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 1.5px solid #ffcc00;
+            position: relative;
+        }
+        .score-box.positivo {
+            border-color: #4caf50;
+            background: linear-gradient(135deg, rgba(76,175,80,0.09) 60%, rgba(255,255,255,0.11));
+        }
+        .score-box.negativo {
+            border-color: #e53935;
+            background: linear-gradient(135deg, rgba(229,57,53,0.09) 60%, rgba(255,255,255,0.11));
+        }
+        .score-title {
+            font-size: 15px;
+            font-weight: bold;
+            margin-bottom: 7px;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .score-box input[type="number"] {
+            padding: 8px 8px;
+            border-radius: 7px;
+            border: 1.5px solid #ccc;
+            font-size: 16px;
+            width: 75px;
+            margin-bottom: 7px;
+            outline: none;
+            text-align: center;
+            transition: border-color 0.2s;
+        }
+        .score-box input[type="number"]:focus {
+            border-color: #ffcc00;
+            background: #fffbe5;
+        }
+        .score-box button {
+            background-color: #66ccff; /* azul clarito */
+            color: #000;
+            font-size: 15px;
+            padding: 7px 18px;
+            border-radius: 7px;
+            margin: 0;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.11);
+            font-weight: bold;
+        }
+        .score-box.positivo button:hover {
+            background-color: #55bbee;
+        }
+        .score-box.negativo button:hover {
+            background-color: #55bbee;
+        }
+        .score-box .fa-arrow-up {
+            color: #4caf50;
+            font-size: 18px;
+        }
+        .score-box .fa-arrow-down {
+            color: #e53935;
+            font-size: 18px;
+        }
+        .control-buttons {
+            text-align: center;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+        .ranking-final {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .ranking-final h3 {
+            font-size: 22px;
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
+        .podio-item {
+            font-size: 18px;
+            margin: 6px 0;
+        }
+        .ventana-ayuda {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(0, 0, 0, 0.85);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+            padding: 20px;
+            text-align: center;
+            font-size: 18px;
+        }
+        .ventana-ayuda-content {
+            background-color: #222;
+            padding: 25px;
+            border-radius: 15px;
+            max-width: 90%;
+            position: relative;
+            box-shadow: 0 0 20px #000;
+        }
+        .ventana-ayuda-content h3 {
+            margin-top: 0;
+            color: #66ccff; /* Azul clarito */
+            font-family: 'Luckiest Guy', cursive;
+            font-size: 22px;
+        }
+        .cerrar-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            font-size: 24px; 
+            color: #66ccff; /* Azul clarito */
+            cursor: pointer;
+        }
+        .boton-ayuda {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #66ccff;
+            color: #000;
+            border: none;
+            padding: 12px 16px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 998;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+            transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s;
+        }
+        .boton-ayuda:hover {
+            background-color: #55bbee;
+            transform: scale(1.08);
+            box-shadow: 0 6px 10px rgba(0,0,0,0.4);
+        }
+        .boton-ayuda:active {
+            transform: scale(0.95);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        /* Animaciones podio */
+        @keyframes fadeScaleIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% {
+                box-shadow: 0 0 30px 10px #ffde59;
+                transform: scale(1.2);
+            }
+            50% {
+                box-shadow: 0 0 45px 15px #ffd700;
+                transform: scale(1.25);
+            }
+        }
+
+        #modalPodio {
+            display: none;
+            position: fixed;
+            top:0; left:0; right:0; bottom:0;
+            background: radial-gradient(circle at center, #222, #080808);
+            font-family: 'Luckiest Guy', cursive;
+            font-size: 24px;
+            text-align: center;
+            z-index: 1000;
+            padding: 40px 20px;
+            overflow-y: auto;
+            color: #fff;
+            box-shadow: 0 0 40px #ffdd55 inset;
+            border-radius: 20px;
+        }
+        #modalPodio.show {
+            animation: fadeScaleIn 0.5s ease forwards;
+        }
+
+        #modalPodio h2 {
+            margin-bottom: 30px;
+            font-size: 36px;
+            color: #ffcc00;
+            text-shadow: 2px 2px 6px #bb8800;
+        }
+
+        #modalPodio .podio-item {
+            font-size: 28px;
+            margin: 15px 0;
+            padding: 15px 20px;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        /* Tercer lugar */
+        #modalPodio .podio-item:nth-child(3) {
+            background: linear-gradient(135deg, #cfa14f, #f6d365);
+            color: #3d2f00;
+            font-weight: bold;
+            font-size: 30px;
+            box-shadow: 0 0 15px 5px #f6d365;
+            transform: scale(1.05);
+        }
+
+        /* Segundo lugar */
+        #modalPodio .podio-item:nth-child(2) {
+            background: linear-gradient(135deg, #b0b0b0, #f0f0f0);
+            color: #222;
+            font-weight: bolder;
+            font-size: 34px;
+            box-shadow: 0 0 20px 8px #ddd;
+            transform: scale(1.1);
+        }
+
+        /* Primer lugar */
+        #modalPodio .podio-item:nth-child(1) {
+            background: linear-gradient(135deg, #ffd700, #fff89a);
+            color: #331a00;
+            font-weight: bolder;
+            font-size: 40px;
+            box-shadow: 0 0 30px 10px #ffde59;
+            transform: scale(1.2);
+            animation: pulseGlow 2s infinite ease-in-out;
+        }
+
+        /* Botones del modal podio mejorados */
+        #modalPodio button {
+            margin-top: 40px;
+            font-size: 20px;
+            padding: 10px 30px;
+            border:none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+            transition: background-color 0.3s;
+            margin-right: 15px;
+            background-color: #ffcc00;
+            color: #000;
+        }
+        #modalPodio button:hover {
+            background-color: #e6b800;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                margin: 10px;
+                padding: 15px;
+            }
+            h1 {
+                font-size: 26px;
+            }
+            .ventana-ayuda-content {
+                padding: 20px;
+            }
+            button, #modalPodio button {
+                width: 100%;
+                margin: 6px 0 0 0;
+            }
+            .score-controls {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .jugador-card {
+                padding: 12px 4px 10px 4px;
+            }
+            .agregar-jugador {
+                flex-direction: column;
+                gap: 8px;
+            }
+            .agregar-jugador input[type="text"] {
+                width: 100%;
+                max-width: 100%;
+            }
+        }
+        /* --- MOSTRAR JUGADORES EN HORIZONTAL --- */
+        #listaJugadores {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            justify-content: center;
+            align-items: flex-start;
+        }
+        .jugador-card {
+            min-width: 220px;
+            max-width: 250px;
+            flex: 1 1 220px;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="overlay"></div>
+
+    <div class="container" id="mainContent">
+        <h1>🎲 Contador de puntos!!</h1>
+
+        <div class="agregar-jugador">
+            <input type="text" id="nombreJugador" placeholder="Nombre del jugador" />
+            <button onclick="agregarJugador()">Agregar</button>
+        </div>
+
+        <div class="control-buttons">
+            <button onclick="reiniciarPuntos()">🔄 Reiniciar Puntos</button>
+            <button onclick="mostrarRanking()" style="display:none;">🏆 Mostrar Ranking Final</button>
+        </div>
+
+        <div id="listaJugadores"></div>
+        <div class="ranking-final" id="rankingFinal"></div>
+    </div>
+
+    <div id="ventanaAyuda" class="ventana-ayuda" style="display:none;">
+        <div class="ventana-ayuda-content">
+            <button class="cerrar-btn" onclick="cerrarAyuda()">❌</button>
+            <h3>¡Bienvenido a QUIZMANIAPOINTS! 🎉</h3>
+            <p>Agrega jugadores, suma o resta puntos y revisa el podio final fácilmente.</p>
+        </div>
+    </div>
+    <button id="botonAyuda" class="boton-ayuda" onclick="mostrarAyuda()">📘 Ayuda</button>
+    <!-- Modal Podio -->
+    <div id="modalPodio">
+        <h2>🏆 Podio Final 🏆</h2>
+        <div id="contenidoPodio"></div>
+        <button id="cerrarPodioBtn" onclick="cerrarPodio()">Cerrar Podio</button>
+        <button id="reiniciarPodioBtn" onclick="reiniciarDesdePodio()">Reiniciar Puntos</button>
+    </div>
+
+    <!-- Audio para el podio -->
+    <audio id="audioPodio" src="audio/pepe.mp3" preload="auto"></audio>
+
+    <script>
+        let jugadores = [];
+
+        function agregarJugador() {
+            const nombre = document.getElementById('nombreJugador').value.trim();
+            if (nombre === '') return;
+            if (jugadores.some(j => j.nombre.toLowerCase() === nombre.toLowerCase())) {
+                alert("Ese jugador ya ha sido agregado.");
+                return;
+            }
+
+            jugadores.push({ nombre: nombre, puntos: 0 });
+            actualizarListaJugadores();
+            document.getElementById('nombreJugador').value = '';
+        }
+
+        function modificarPuntos(index, puntos) {
+            jugadores[index].puntos += puntos;
+            actualizarListaJugadores();
+
+            if ('speechSynthesis' in window && puntos !== 0) {
+                const jugador = jugadores[index];
+                const tipo = puntos > 0 ? 'ganado' : 'perdido';
+                const cantidad = Math.abs(puntos);
+                const texto = `El equipo ${jugador.nombre} ha ${tipo} ${cantidad} puntos.`;
+
+                const utterance = new SpeechSynthesisUtterance(texto);
+                utterance.lang = 'es-ES';
+
+                const voices = window.speechSynthesis.getVoices();
+                if (voices.length > 0) {
+                    const vozSeleccionada = voices.find(v => v.lang.startsWith('es') && v.name.toLowerCase().includes('maria')) || voices[0];
+                    utterance.voice = vozSeleccionada;
+                }
+
+                utterance.pitch = 1.1;
+                utterance.rate = 1.0;
+                utterance.volume = 1;
+
+                speechSynthesis.speak(utterance);
+            }
+
+            if (jugadores[index].puntos >= 75) {
+                mostrarModalPodio();
+            }
+        }
+
+        function reiniciarPuntos() {
+            jugadores.forEach(j => j.puntos = 0);
+            actualizarListaJugadores();
+            document.getElementById('rankingFinal').innerHTML = '';
+        }
+
+        // NUEVA versión con diseño bonito para sumar/restar puntos
+        function actualizarListaJugadores() {
+            const lista = document.getElementById('listaJugadores');
+            lista.innerHTML = '';
+
+            jugadores.forEach((jugador, index) => {
+                const div = document.createElement('div');
+                div.className = 'jugador-card';
+
+                div.innerHTML = `
+                    <h3>${jugador.nombre}</h3>
+                    <div class="puntos">${jugador.puntos} puntos</div>
+                    <div class="score-controls">
+                        <div class="score-box positivo">
+                            <div class="score-title"><i class="fa-solid fa-arrow-up"></i> Puntos que ganas</div>
+                            <input type="number" id="ganar-${index}" class="puntos-input" placeholder="Ej: 10" min="0">
+                            <button onclick="modificarPuntos(${index}, parseInt(document.getElementById('ganar-${index}').value) || 0)">
+                                <i class="fa-solid fa-plus"></i> Aplicar
+                            </button>
+                        </div>
+                        <div class="score-box negativo">
+                            <div class="score-title"><i class="fa-solid fa-arrow-down"></i> Puntos que pierdes</div>
+                            <input type="number" id="perder-${index}" class="puntos-input" placeholder="Ej: 10" min="0">
+                            <button onclick="modificarPuntos(${index}, -(parseInt(document.getElementById('perder-${index}').value) || 0))">
+                                <i class="fa-solid fa-minus"></i> Aplicar
+                            </button>
+                        </div>
+                    </div>
+                `;
+                lista.appendChild(div);
+            });
+        }
+
+        function anunciarGanador() {
+            if ('speechSynthesis' in window) {
+                const ordenados = jugadores.slice().sort((a, b) => b.puntos - a.puntos);
+                if (ordenados.length > 0) {
+                    const ganador = ordenados[0];
+                    const texto = `Felicidades ${ganador.nombre}, han ganado una tarjeta de Spotify, buen trabajo.`;
+                    const utterance = new SpeechSynthesisUtterance(texto);
+                    utterance.lang = 'es-ES';
+
+                    const voices = window.speechSynthesis.getVoices();
+                    if (voices.length > 0) {
+                        const vozSeleccionada = voices.find(v => v.lang.startsWith('es') && v.name.toLowerCase().includes('maria')) || voices[0];
+                        utterance.voice = vozSeleccionada;
+                    }
+
+                    utterance.pitch = 1.0;
+                    utterance.rate = 1.0;
+                    utterance.volume = 2;
+
+                    utterance.onend = function() {
+                        // Reproducir la música después de que termine la voz
+                        const audio = document.getElementById('audioPodio');
+                        if(audio) {
+                            audio.currentTime = 0;
+                            audio.play();
+                        }
+                    };
+
+                    speechSynthesis.speak(utterance);
+                }
+            }
+        }
+
+        function mostrarModalPodio() {
+            const contenidoPodio = document.getElementById('contenidoPodio');
+            const ordenados = jugadores.slice().sort((a, b) => b.puntos - a.puntos);
+            let podioHtml = '';
+            ordenados.forEach((j, i) => {
+                podioHtml += `<div class="podio-item">${i + 1}. ${j.nombre} - ${j.puntos} puntos</div>`;
+            });
+            contenidoPodio.innerHTML = podioHtml;
+            const modal = document.getElementById('modalPodio');
+            modal.style.display = 'block';
+
+            modal.classList.remove('show');
+            void modal.offsetWidth;  // Forzar reflow para reiniciar animación
+            modal.classList.add('show');
+
+            anunciarGanador();
+
+            // No reproducir la música aquí para evitar duplicados
+            // La música se reproduce después de la voz en anunciarGanador
+        }
+
+        function cerrarPodio() {
+            document.getElementById('modalPodio').style.display = 'none';
+            const audio = document.getElementById('audioPodio');
+            if(audio) {
+                audio.pause();
+                audio.currentTime = 0;
+            }
+        }
+
+        function reiniciarDesdePodio() {
+            reiniciarPuntos();
+            cerrarPodio();
+        }
+
+        function mostrarAyuda() {
+            document.getElementById('ventanaAyuda').style.display = 'flex';
+        }
+
+        function cerrarAyuda() {
+            document.getElementById('ventanaAyuda').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
+
+
+
